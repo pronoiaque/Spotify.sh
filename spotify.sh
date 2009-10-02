@@ -28,6 +28,13 @@ if [ ! -x /usr/bin/amixer ] ; then
         fi
 fi
 
+####################################
+### On lance Spotify, avant toute chose
+###
+
+`$WINEPREFIX`
+
+
 ###################################
 ###  On récupère la liste des Pubs
 ###
