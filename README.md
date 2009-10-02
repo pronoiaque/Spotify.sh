@@ -1,5 +1,16 @@
-GNU GPL v2
+Spotify - Mute Ads
+====================
 
-Ce logiciel baisse le volume (à 5%) de votre ordinateur durant les pubs vocales spotify,
-en détectant le titre de la chanson dans la fenêtre wine.
-Un contre système remonte légèrement le son au besoin, pour éviter la mise en pause automatique de la pub.
+This little script aim to shut off the sound when spotify vocal ads are playing. 
+It detects the title of the current track in the wine window.
+
+If Spotify detects that the sound is muted, this software pull up a little the sound, 
+to avoid automatic pause of Spotify Ad.
+
+The Software is licenced under GNU/GPL v2, so feel free to make changes !
+
+Credits
+========
+
+- pronoiaque : original idea and realisation
+- aidos: avoid script to loop when Spotify not lauched
