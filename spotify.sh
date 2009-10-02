@@ -7,9 +7,25 @@
 ###
 declare -i volume
 declare -i tagueule
+declare -i adsurl
+
+pubpatterns=$(wget -O - http://github.com/pronoiaque/Spotify.sh/raw/master/spotify.pub 2>/dev/null)
 tagueule=""
 user=`whoami`
+
 env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
+
+
+
+###################################
+###  On récupère la liste des Pubs
+###
+### ( Merci de me signaler s'il manque des pubs, si possible avec leur titre )
+###
+if [ $1 ] ; then
+	echo $1
+	pubpatterns=$(wget -O - "`echo $1`" 2>/dev/null)
+fi
 
 ##################################################################"
 ### Est-ce que les packages necessaires sont installés ?
@@ -35,12 +51,6 @@ fi
 `$WINEPREFIX`
 
 
-###################################
-###  On récupère la liste des Pubs
-###
-### ( Merci de me signaler s'il manque des pubs, si possible avec leur titre )
-###
-pubpatterns=$(wget -O - http://bit.ly/1ArAH 2>/dev/null)
 
 
 ########################################
@@ -49,8 +59,8 @@ pubpatterns=$(wget -O - http://bit.ly/1ArAH 2>/dev/null)
 
 function grab_titre
 {
-titre=$(echo `wmctrl -l | grep Spotify | cut -d" " -f 5-500`)
-tilt=$(echo `echo $titre | grep -iE "$pubpatterns"`)
+	titre=$(echo `wmctrl -l | grep Spotify | cut -d" " -f 5-500`)
+	tilt=$(echo `echo $titre | grep -iE "$pubpatterns"`)
 }
 
 ######################################
@@ -58,15 +68,15 @@ tilt=$(echo `echo $titre | grep -iE "$pubpatterns"`)
 ###
 function get_user_vol
 {
-VolMaster=`amixer -c 0 cget name='Master Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
-VolPCM=`amixer -c 0 cget name='PCM Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
+	VolMaster=`amixer -c 0 cget name='Master Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
+	VolPCM=`amixer -c 0 cget name='PCM Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
 }
 ################################################
 ### Pour les reinjecter après une pub
 function put_user_vol
 {
-amixer -q cset name='Master Playback Volume' $VolMaster
-amixer -q cset name='PCM Playback Volume' $VolPCM
+	amixer -q cset name='Master Playback Volume' $VolMaster
+	amixer -q cset name='PCM Playback Volume' $VolPCM
 }
 
 #############################################
@@ -74,7 +84,7 @@ amixer -q cset name='PCM Playback Volume' $VolPCM
 ###
 function setvolume
 {
-amixer -c 0 cset name='PCM Playback Volume' $1
+	amixer -c 0 cset name='PCM Playback Volume' $1
 }
 
 ###########################################
