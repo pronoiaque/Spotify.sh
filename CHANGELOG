@@ -1,0 +1,15 @@
+02/10/2009: 	Conserve le niveau du son choisi par l'utilisateur (donc ne remonte plus à 100% après une pub)
+		Sortie de la boucle quand spotify est fermé 
+		Nouveau mixer + standard - test des logiciels requis
+		
+
+30/09/2009: 	fonctionne maintenant sans seuil empirique et ajout d'un tag de déclenchement (tagueule). 50% plus rapide (moins de pause automatique de spotify)
+
+
+29/09/2009: 	plus de crossfader (pub coupée cash), plus le bug de son faible à demarrage.
+
+
+28/09/2009: 	la liste des pubs est auto-updatée via une url
+
+
+27/09/2009: 	fonctionne sur une liste pubs, plus simplement sur un seul pattern 
