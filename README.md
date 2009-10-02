@@ -14,3 +14,4 @@ Credits
 
 - pronoiaque : original idea and realisation
 - aidos: avoid script to loop when Spotify not lauched
+- ametaireau : add alter ads'url - help 'nd support for github 
