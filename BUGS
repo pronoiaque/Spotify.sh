@@ -1,0 +1,3 @@
+Si une autre fenêtre est ouverte et contient le mot "Spotify" dans le titre, la pub reste en pause.
+
+Le niveau du volume est bloqué lors du lancement du script (sauf si on regle le master à la place du PCM... ou le bouton des enceintes :-)
