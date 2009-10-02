@@ -1,0 +1,5 @@
+sudo aptitude install alsa-utils wmctrl 
+wget -c http://github.com/pronoiaque/Spotify.sh/raw/master/spotify.sh -o /tmp/spotify.sh
+chmod a+x /tmp/spotify.sh
+sudo mv /tmp/spotify.sh /usr/bin/
+./usr/bin/spotify.sh
