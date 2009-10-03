@@ -147,9 +147,10 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
     ### - on remonte le son au niveau du volume de l'utilisateur
     ###
 
-    if [ $tagueule = 1 ] && [ "$tilt" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -lt $VolPCM ] ; then
+    if  [ "$tilt" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -lt $VolPCM ] ; then
         put_user_vol
         tagueule=""
+	echo  "put user vol"
     fi
 
     ################################################################
