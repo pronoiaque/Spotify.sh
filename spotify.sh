@@ -149,7 +149,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 
     if [ $tagueule = 1 ] && [ "$tilt" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -lt $VolPCM ] ; then
         put_user_vol
-        tagueule=0
+        tagueule=""
     fi
 
     ################################################################
