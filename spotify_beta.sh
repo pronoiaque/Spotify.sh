@@ -46,11 +46,9 @@ fi
 env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
 
 
-
-
 ########################################
 ### On crée un fonction qui détecte le titre de la fenêtre Spotify
-### et qui crée un "tilt" si un pub est détectée
+### et qui crée un "ads" non NULL si un pub est détectée
 
 function grab_titre
 {
@@ -66,6 +64,7 @@ function get_user_vol
 	VolMaster=`amixer -c 0 cget name='Master Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
 	VolPCM=`amixer -c 0 cget name='PCM Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
 }
+
 ################################################
 ### Pour les reinjecter après une pub
 function put_user_vol
@@ -79,7 +78,7 @@ function put_user_vol
 ###
 function setvolume
 {
-	amixer -c 0 cset name='PCM Playback Volume' $1
+	amixer -c 0 cset name='PCM Playback Volume' $1 1>/dev/null
 }
 
 ###########################################
@@ -92,43 +91,68 @@ volume=$VolPCM
 ### Début de la Boucle - temps que Spotify tourne
 while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
   do
+
+	###############################
+	## Recuperation titre et volume
+	##
 	grab_titre
 
-	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 5 ] && [ $tagueule = 0 ] ; then
+	##############################################################################
+	### Si une pub en PLAY est detectée avec un volume fort
+	### - On baisse le volume au mininum -> Mise en PAUSE
+	### - Ajout d'un trigger (ferme) "tagueule" 
+
+	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 6 ] ; then
 		volume=1
-		setvolume $volume 2>/dev/null
-		sleep 0.5
+		setvolume $volume
+		sleep 0.2
 		tagueule=1
 		grab_titre
 		echo "mise en PAUSE"
 	fi
 
+	#####################################################
+	### Si Spotify est en PAUSE + trigger
+	### - On augmente le volume jusqu`à la mise en PLAY
+	###
 	while [ "$titre" = "Spotify" ] && [ $tagueule = 1 ] ;
 	 do
+		volume=$((`echo $volume` + 3))
+		setvolume $volume
+		sleep 0.2
 		grab_titre
-		volume=$((`echo $volume` + 1))
-		setvolume $volume 2>/dev/null
-		sleep 0.5
-		echo "Aumentation +1 du volume, jusquà mise en PLAY"
+		echo "Augmentation +3 du volume, jusquà mise en PLAY" "("$volume")"
 	done
 
-	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -lt 5 ] ;
+	##################################################################################################
+	## Si la pub est en PLAY à un volume reduit
+	## - On la laisse tourner
+	##
+	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -le 6 ] ;
 	 do
 		grab_titre
 		echo dodo
 		sleep 0.5
-		if [ $ads = "" ] ; then
-			put_user_vol
-			tagueule=0
-			break
-			echo "fin de la pub"
-		fi
 	done
 
-	if [ "$ads" = "" ] ; then
-		sleep 0.2
+	###############################################
+	## S'il n'y a plus de pub
+	## - On remets le 
+
+	if [ "$ads" = "" ] && [ $tagueule = 1 ] ; then
+		put_user_vol
+		tagueule=0
+		echo "fin de la pub"
 	fi
 
+	################################
+	## Recuperation du Volume
+	##
+	if [ $tagueule = 0 ] ; then
+		get_user_vol
+	fi
+
+	sleep 0.2
+
 done
-echo "oups trop loin"
 exit 0
