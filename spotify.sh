@@ -1,7 +1,7 @@
 #!/bin/bash
 ###
-### Under GPL v2 - pronoiaque@gmail.com
-### thx aidos
+### Under GPL v2
+### thx aidos and ametaireau
 ###
 ### Variables et lancement de Spotify
 ###
