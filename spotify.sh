@@ -1,7 +1,7 @@
 #!/bin/bash
 ###
-### Under GPL v2
-### thx aidos and ametaireau
+### Under GPL v2 - pronoiaque@gmail.com
+### thx aidos
 ###
 ### Variables et lancement de Spotify
 ###
@@ -100,7 +100,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	##############################################################################
 	### Si une pub en PLAY est detectée avec un volume fort
 	### - On baisse le volume au mininum -> Mise en PAUSE
-	### - Ajout d'un trigger (ferme) "tagueule" 
+	### - Ajout d'un trigger (ferme) "tagueule"
 
 	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 7 ] ; then
 		volume=1
@@ -108,7 +108,6 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 		sleep 0.4
 		tagueule=1
 		grab_titre
-		echo "mise en PAUSE"
 	fi
 
 	#####################################################
@@ -121,7 +120,6 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 		setvolume $volume
 		sleep 0.5
 		grab_titre
-		echo "Augmentation +3 du volume, jusquà mise en PLAY" "("$volume")"
 	done
 
 	##################################################################################################
@@ -131,18 +129,16 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -le 7 ] ;
 	 do
 		grab_titre
-		echo dodo
 		sleep 0.5
 	done
 
 	###############################################
 	## S'il n'y a plus de pub
-	## - On remets le 
+	## - On remets le
 
 	if [ "$ads" = "" ] && [ $tagueule = 1 ] ; then
 		put_user_vol
 		tagueule=0
-		echo "fin de la pub"
 	fi
 
 	################################
@@ -150,9 +146,9 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	##
 	if [ $tagueule = 0 ] ; then
 		get_user_vol
+		volume=$VolPCM
 	fi
 
 	sleep 0.2
-
 done
 exit 0
