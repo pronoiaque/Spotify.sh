@@ -102,10 +102,10 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	### - On baisse le volume au mininum -> Mise en PAUSE
 	### - Ajout d'un trigger (ferme) "tagueule" 
 
-	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 6 ] ; then
+	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 7 ] ; then
 		volume=1
 		setvolume $volume
-		sleep 0.2
+		sleep 0.4
 		tagueule=1
 		grab_titre
 		echo "mise en PAUSE"
@@ -119,7 +119,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	 do
 		volume=$((`echo $volume` + 3))
 		setvolume $volume
-		sleep 0.2
+		sleep 0.5
 		grab_titre
 		echo "Augmentation +3 du volume, jusquà mise en PLAY" "("$volume")"
 	done
@@ -128,7 +128,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	## Si la pub est en PLAY à un volume reduit
 	## - On la laisse tourner
 	##
-	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -le 6 ] ;
+	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -le 7 ] ;
 	 do
 		grab_titre
 		echo dodo
