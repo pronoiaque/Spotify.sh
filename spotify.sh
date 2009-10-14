@@ -140,7 +140,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	while [ "$titre" = "Spotify" ] && [ $tagueule = 1 ] ;
 	 do
 	 	debug "spotify est en pause, mais une pub est en cours, on monte un peu le son"
-		volume=$((`echo $volume` + 3))
+		volume=$((`echo $volume` + 1))
 		setvolume $volume
 		sleep 0.5
 		grab_titre
