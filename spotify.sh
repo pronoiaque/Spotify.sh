@@ -1,13 +1,21 @@
 #!/bin/bash
 ###
-### Under GPL v2 - pronoiaque@gmail.com
-### thx aidos
+### Sous license GPL v2
+### 
+### Auteurs : 
+### - pronoiaque at gmail dot com
+### - aidos
+### - alexis at spiral-project dot org
 ###
 ### Variables et lancement de Spotify
 ###
 declare -i volume
 declare -i tagueule
+declare -i debug
+declare -i tempmessage
 
+debug=0
+tempmessage=""
 tagueule=0
 user=`whoami`
 
@@ -17,7 +25,11 @@ user=`whoami`
 ### ( Merci de me signaler s'il manque des pubs, si possible avec leur titre )
 ###
 if [ $1 ] ; then
-	pubpatterns=$(wget -O - "`echo $1`" 2>/dev/null)
+  if [ $1 = "local" ] ; then
+    pubpatterns=$(cat spotify.pub)
+    else
+	  pubpatterns=$(wget -O - "`echo $1`" 2>/dev/null)
+  fi
   else
 	pubpatterns=$(wget -O - http://github.com/pronoiaque/Spotify.sh/raw/master/spotify.pub 2>/dev/null)
 
@@ -40,11 +52,17 @@ if [ ! -x /usr/bin/amixer ] ; then
         fi
 fi
 
-####################################
-### On lance Spotify, avant toute chose
-###
-env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
+#env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
 
+########################################
+### Fonction de debug
+
+function debug
+{
+	if [ $debug = 1 ] ; then
+		echo $1
+	fi
+}
 
 ########################################
 ### On crée un fonction qui détecte le titre de la fenêtre Spotify
@@ -54,6 +72,10 @@ function grab_titre
 {
 	titre=$(echo `wmctrl -l | grep Spotify | cut -d" " -f 5-500`)
 	ads=$(echo `echo $titre | grep -iE "$pubpatterns"`)
+	
+	if [ "$ads" = "" ] ; then
+		ads=$(echo `echo $titre | grep "Spotify - Spotify"`)
+	fi
 }
 
 ######################################
@@ -93,7 +115,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
   do
 
 	###############################
-	## Recuperation titre et volume
+	## Recuperation titre
 	##
 	grab_titre
 
@@ -103,6 +125,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	### - Ajout d'un trigger (ferme) "tagueule"
 
 	if [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $volume -gt 7 ] ; then
+		debug "pub en cours, on baisse le son parce qu'il est trop fort'"
 		volume=1
 		setvolume $volume
 		sleep 0.4
@@ -116,6 +139,7 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	###
 	while [ "$titre" = "Spotify" ] && [ $tagueule = 1 ] ;
 	 do
+	 	debug "spotify est en pause, mais une pub est en cours, on monte un peu le son"
 		volume=$((`echo $volume` + 3))
 		setvolume $volume
 		sleep 0.5
@@ -128,15 +152,17 @@ while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
 	##
 	while [ ! "$ads" = "" ] && [ ! "$titre" = "Spotify" ] && [ $tagueule = 1 ] && [ $volume -le 7 ] ;
 	 do
+	 	debug "la pub est en train de se lire"
 		grab_titre
 		sleep 0.5
 	done
 
 	###############################################
 	## S'il n'y a plus de pub
-	## - On remets le
+	## - On remets le son
 
 	if [ "$ads" = "" ] && [ $tagueule = 1 ] ; then
+		debug "la pub est terminée, on remets le son"
 		put_user_vol
 		tagueule=0
 	fi
