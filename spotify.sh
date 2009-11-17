@@ -83,16 +83,16 @@ function grab_titre
 ###
 function get_user_vol
 {
-	VolMaster=`amixer -c 0 cget name='Master Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
-	VolPCM=`amixer -c 0 cget name='PCM Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
+	VolMaster=`amixer -c 0 -D hw:0 cget name='Master Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
+	VolPCM=`amixer -c 0 -D hw:0 cget name='PCM Playback Volume' | grep : | sed 's/^.*=\([^,]*\).*$/\1/'`
 }
 
 ################################################
 ### Pour les reinjecter après une pub
 function put_user_vol
 {
-	amixer -q cset name='Master Playback Volume' $VolMaster
-	amixer -q cset name='PCM Playback Volume' $VolPCM
+	amixer -q -D hw:0 cset name='Master Playback Volume' $VolMaster
+	amixer -q -D hw:0 cset name='PCM Playback Volume' $VolPCM
 }
 
 #############################################
@@ -100,7 +100,7 @@ function put_user_vol
 ###
 function setvolume
 {
-	amixer -c 0 cset name='PCM Playback Volume' $1 1>/dev/null
+	amixer -c 0 -D hw:0 cset name='PCM Playback Volume' $1 1>/dev/null
 }
 
 ###########################################
