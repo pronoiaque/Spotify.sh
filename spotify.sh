@@ -2,11 +2,12 @@
 ###
 ### Sous license GPL v2
 ### 
-### Auteurs : 
+### Auteurs et contributeurs : 
 ### - pronoiaque at gmail dot com
 ### - aidos
 ### - alexis at spiral-project dot org
-###
+### - Nils
+### - p6s
 ### Variables et lancement de Spotify
 ###
 declare -i volume
@@ -52,7 +53,7 @@ if [ ! -x /usr/bin/amixer ] ; then
         fi
 fi
 
-#env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
+env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
 
 ########################################
 ### Fonction de debug
@@ -111,7 +112,8 @@ volume=$VolPCM
 
 ###################################################
 ### Début de la Boucle - temps que Spotify tourne
-while [ ! "`ps x | grep spotify.exe | grep -v grep`"  = "" ] ;
+
+while while [ $(pstree|grep "spotify.exe"|wc -l) = "1" ] ;
   do
 
 	###############################
