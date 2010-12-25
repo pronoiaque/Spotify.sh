@@ -53,7 +53,11 @@ if [ ! -x /usr/bin/amixer ] ; then
         fi
 fi
 
-env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
+if [ $(pstree|grep "spotify.exe"|wc -l) = "0" ] ; then
+	#$(playonlinux --run Spotify)&
+	env WINEPREFIX="/home/$user/.wine" wine 2>/dev/null "C:\Program Files\Spotify\spotify.exe"&
+	sleep 1
+fi
 
 ########################################
 ### Fonction de debug
