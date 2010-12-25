@@ -6,7 +6,7 @@
 ### - pronoiaque at gmail dot com
 ### - aidos
 ### - alexis at spiral-project dot org
-### - Nils
+### - M@dinko12
 ### - p6s
 ### Variables et lancement de Spotify
 ###
