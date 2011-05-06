@@ -117,7 +117,7 @@ volume=$VolPCM
 ###################################################
 ### Début de la Boucle - temps que Spotify tourne
 
-while while [ $(pstree|grep "spotify.exe"|wc -l) = "1" ] ;
+while [ $(pstree|grep "spotify.exe"|wc -l) = "1" ] ;
   do
 
 	###############################
